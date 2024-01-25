@@ -1,73 +1,44 @@
-from datetime import date
-import random
-def main(arg):
-    if numero_card(str(arg)):
-        number = multiplicate_code(arg)
-        code = add_code(number)
-        if check_result(arg):
-            if check_date(arg):
-                if cvc_card(arg):
-                    return 'tout est bon'
-                else:
-                    return 'le crypto n est pas bon'
-            else:
-                return 'la date n est pas bonne '
-        else:
-            return ' le code n est pas bon'
-    else:
-        return 'votre numéro n est pas a la bonne taille'
 
+# copie de la lib luhn
 
+def checksum(string):
+    """
+    Compute the Luhn checksum for the provided string of digits. Note this
+    assumes the check digit is in place.
+    """
+    digits = list(map(int, string))
+    odd_sum = sum(digits[-1::-2])
+    even_sum = sum([sum(divmod(2 * d, 10)) for d in digits[-2::-2]])
+    return (odd_sum + even_sum) % 10
 
-def numero_card(arg):
-    size = 0
-    for i in arg:
-        if i != ' ':
-            size += 1
-    if size == 16:
-        return True
-    else:
-        return False
+def verify(string):
+    """
+    Check if the provided string of digits satisfies the Luhn checksum.
 
-def multiplicate_code(arg):
-    number = 0
-    mergeNumber = 0
-    for i in str(arg):
-        if len(str(i)) > 1:
-            for j in i:
-                mergeNumber += int(j)
-            number = mergeNumber
-            mergeNumber = 0
-        else:
-            number += int(i)
-    return number
+    >>> verify('356938035643809')
+    True
+    >>> verify('534618613411236')
+    False
+    """
+    return (checksum(string) == 0)
 
-def add_code(arg):
-    if arg <= 0:
-            return ValueError
-    else:
-        number = 0
-        for i in str(arg):
-            number += int(i)
-        return number
+def generate(string):
+    """
+    Generate the Luhn check digit to append to the provided string.
 
-def check_result(arg):
-    if arg <= 0 or arg > 140 or arg % 10 != 0:
-        return False
-    else:
-        return True
+    >>> generate('35693803564380')
+    9
+    >>> generate('53461861341123')
+    4
+    """
+    cksum = checksum(string + '0')
+    return (10 - cksum) % 10
 
-def check_date(arg):
-    today = date.today()
-    d1 = today.replace(year = today.year + 2).strftime("%m/%Y")
-    return d1
+def append(string):
+    """
+    Append Luhn check digit to the end of the provided string.
 
-def cvc_card(arg):
-    number = 0
-    for i in range (3):
-        number += random.randrange(1,9)
-    return number
-
-if __name__ == '__main__':
-    main(1234567890123456)
-
+    >>> append('53461861341123')
+    '534618613411234'
+    """
+    return string + str(generate(string))
