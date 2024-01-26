@@ -11,6 +11,11 @@ const results = dataSet.map((data) => {
 parentPort.postMessage(results);
 
 function luhnIsValid(data) {
+  if (data.length === 0) return "Vide";
+
+  // enlever le dernier caractère qui est une virgule
+  data = data.slice(0, -1);
+
   const isValid = Luhn.isValid(data.toString());
 
   return `Le numéro ${data} est ${isValid ? "valide" : "invalide"}`;

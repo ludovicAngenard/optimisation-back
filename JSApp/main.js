@@ -1,8 +1,4 @@
-// main.js
-const {
-  Worker,
-  isMainThread,
-} = require("worker_threads");
+const { Worker, isMainThread } = require("worker_threads");
 const dataSet = require("../dataSet.json");
 
 if (isMainThread) {
