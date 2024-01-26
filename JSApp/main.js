@@ -2,8 +2,6 @@
 const {
   Worker,
   isMainThread,
-  parentPort,
-  workerData,
 } = require("worker_threads");
 const dataSet = require("../dataSet.json");
 
