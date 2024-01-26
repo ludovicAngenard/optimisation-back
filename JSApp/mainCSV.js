@@ -25,7 +25,7 @@ fs.readFile(dataSetPath, (err, data) => {
     for (let i = 0; i < numWorkers; i++) {
       const start = i * chunkSize;
       const end = start + chunkSize;
-      const worker = new Worker("./luhnWorker.js", {
+      const worker = new Worker("./luhnWorkerCSV.js", {
         workerData: dataSetArray.slice(start, end),
       });
       workers.push(worker);
